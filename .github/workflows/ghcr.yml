@@ -21,8 +21,6 @@ jobs:
       - name: Lowercase image name
         id: image
         run: echo "name=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Log in to the Container registry
@@ -45,7 +43,8 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
+          # arm64 under QEMU fails at `npm ci`; add it back with a native arm runner if needed
+          platforms: linux/amd64
           push: true
           provenance: false
           tags: ${{ steps.meta.outputs.tags }}
