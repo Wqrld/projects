@@ -80,6 +80,12 @@ class S3FileManager {
 
   // eslint-disable-next-line class-methods-use-this
   buildUrl(filePathSegment) {
+    if (sails.config.custom.s3ProxyPublicFiles) {
+      // Same URL as local storage: served by the `GET /user-avatars/*` and
+      // `GET /project-background-images/*` routes
+      return `${sails.config.custom.baseUrl}/${filePathSegment.replace(/^public\//, '')}`;
+    }
+
     return `${sails.hooks.s3.getBaseUrl()}/${filePathSegment}`;
   }
 }

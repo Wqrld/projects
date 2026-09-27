@@ -61,6 +61,40 @@ function staticDirServer(prefix, dirFn) {
  * https://sailsjs.com/anatomy/config/routes-js
  */
 
+// Stream a public file (avatar, background image) from S3 when S3_PROXY_PUBLIC_FILES is
+// enabled, otherwise hand the request over to `fallback`.
+function s3PublicFileServer(prefix, pathSegmentFn, fallback) {
+  return async function handleReq(req, res, next) {
+    if (!sails.hooks.s3.isActive() || !sails.config.custom.s3ProxyPublicFiles) {
+      return fallback(req, res, next);
+    }
+
+    const subpath = removeRoutePrefix(prefix, req.path);
+    // Keys are only ever resolved below the public prefix
+    if (subpath.split('/').some((segment) => segment === '..' || segment === '.')) {
+      return next();
+    }
+
+    const fileManager = sails.hooks['file-manager'].getInstance();
+    const filePathSegment = `${pathSegmentFn()}${subpath}`;
+
+    let readStream;
+    try {
+      readStream = await fileManager.read(filePathSegment);
+    } catch (error) {
+      return next();
+    }
+
+    res.type(path.extname(filePathSegment));
+    res.set({
+      'Cache-Control': 'public, max-age=86400', // TODO: move to config
+      'X-Content-Type-Options': 'nosniff',
+    });
+
+    return readStream.pipe(res);
+  };
+}
+
 module.exports.routes = {
   'GET /api/stats': 'stats/index',
 
@@ -144,11 +178,24 @@ module.exports.routes = {
   'GET /robots.txt': 'robots',
 
   'GET /user-avatars/*': {
-    fn: staticDirServer('/user-avatars', () =>
-      path.join(
-        path.resolve(sails.config.custom.uploadsBasePath),
-        sails.config.custom.userAvatarsPathSegment,
+    fn: s3PublicFileServer(
+      '/user-avatars',
+      () => sails.config.custom.userAvatarsPathSegment,
+      staticDirServer('/user-avatars', () =>
+        path.join(
+          path.resolve(sails.config.custom.uploadsBasePath),
+          sails.config.custom.userAvatarsPathSegment,
+        ),
       ),
+    ),
+    skipAssets: false,
+  },
+
+  'GET /project-background-images/*': {
+    fn: s3PublicFileServer(
+      '/project-background-images',
+      () => sails.config.custom.projectBackgroundImagesPathSegment,
+      (req, res, next) => next(),
     ),
     skipAssets: false,
   },

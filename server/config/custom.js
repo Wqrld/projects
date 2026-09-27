@@ -161,6 +161,9 @@ module.exports.custom = {
   s3SecretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
   s3Bucket: process.env.S3_BUCKET,
   s3ForcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'true',
+  // When true, avatars and background images are streamed from the bucket by the server
+  // (like attachments) instead of being linked to directly, so the bucket can stay private.
+  s3ProxyPublicFiles: process.env.S3_PROXY_PUBLIC_FILES === 'true',
 
   oidcIssuer: process.env.OIDC_ISSUER,
   oidcClientId: process.env.OIDC_CLIENT_ID,

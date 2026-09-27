@@ -62,6 +62,7 @@ Only needed to store attachments/avatars/backgrounds on an S3-compatible bucket 
 | `S3_SECRET_ACCESS_KEY` | Secret access key.                                                         |
 | `S3_BUCKET`            | Bucket name.                                                               |
 | `S3_FORCE_PATH_STYLE`  | Set to `true` for endpoints that require path-style requests (e.g. MinIO). |
+| `S3_PROXY_PUBLIC_FILES` | Set to `true` to have the server stream avatars and background images from the bucket, as it already does for attachments, instead of linking browsers to the bucket directly. Use it when the bucket is private or its endpoint is internal. |
 
 ### Horizontal scaling (multiple instances), optional
 
