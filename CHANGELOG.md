@@ -7,10 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.1] - 2026-09-27
+
+### Added
+
+- `S3_PROXY_PUBLIC_FILES` to serve avatars and background images through the server from a private bucket
+- Helm chart
+
+### Changed
+
+- Docker image runs as uid/gid 1000 and is published to ghcr.io
+
 ### Security
 
+- Check source board authorization on duplicate
 - Upgrade server dependencies with known vulnerabilities (bcrypt 6, nodemailer 10, sharp 0.35, express, socket.io, ws, lodash, validator)
 - Upgrade client dependencies with known vulnerabilities (axios, js-cookie, lodash, nanoid, react-router-dom, js-yaml)
+- Fix stored XSS via attacker-chosen attachment extension
 
 ## [1.3.0] - 2026-05-28
 
