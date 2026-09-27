@@ -12,7 +12,7 @@
 ## @extra image.credentials.registry Registry url for which the credentials are specified
 ## @extra image.credentials.name Name of the generated secret for imagePullSecrets
 image:
-  repository: lasuite/projects
+  repository: ghcr.io/wqrld/projects
   pullPolicy: IfNotPresent
   tag: "latest"
 

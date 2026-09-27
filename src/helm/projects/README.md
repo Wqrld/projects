@@ -6,7 +6,7 @@
 
 | Name                                  | Description                                          | Value                  |
 | ------------------------------------- | ---------------------------------------------------- | ---------------------- |
-| `image.repository`                    | Repository to use to pull projects's container image | `lasuite/projects`     |
+| `image.repository`                    | Repository to use to pull projects's container image | `ghcr.io/wqrld/projects` |
 | `image.tag`                           | projects's container tag                             | `latest`               |
 | `image.pullPolicy`                    | Container image pull policy                          | `IfNotPresent`         |
 | `image.credentials.username`          | Username for container registry authentication       |                        |
