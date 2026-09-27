@@ -26,7 +26,7 @@ FROM node:${NODE_VERSION}-alpine
 
 RUN apk add bash --no-cache
 
-USER node
+USER 1000:1000
 WORKDIR /app
 
 COPY --chown=node:node start.sh .
