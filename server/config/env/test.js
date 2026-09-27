@@ -64,6 +64,11 @@ module.exports = {
     },
   },
 
+  // CI has no .env, and tests that sign JWTs need a secret
+  session: {
+    secret: process.env.SECRET_KEY || 'test-secret-key',
+  },
+
   log: {
     level: 'warn',
   },
